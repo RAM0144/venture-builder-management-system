@@ -1,0 +1,206 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  
+}
+
+model User {
+  id                  String                  @id @default(cuid())
+  name                String
+  email               String                  @unique
+  phone               String?
+  password            String?
+  role                Role                    @default(VB)
+
+  isActive            Boolean                 @default(true)
+  isFirstLogin        Boolean                 @default(true)
+
+  inviteToken         String?
+  inviteTokenExpiry   DateTime?
+
+  emailVerified       Boolean       @default(false)
+
+  verifyToken         String?
+  verifyTokenExpiry   DateTime?
+
+  resetToken          String?
+  resetTokenExpiry    DateTime?
+
+  createdAt           DateTime                @default(now())
+  updatedAt           DateTime                @updatedAt
+
+  ventureBuilderProfile VentureBuilderProfile?
+
+  hubAssignments      HubAssignment[]
+
+  managedHubs          Hub[]                  @relation("HubManager")
+
+  milestoneAssignments MilestoneAssignment[] @relation("AssignedVB")
+
+  reviewedMilestones  MilestoneAssignment[]  @relation("ReviewedBy")
+
+  uploadedDocuments   Document[]             @relation("UploadedBy")
+
+  createdBy           String?
+
+  @@index([email])
+}
+
+enum Role {
+  ADMIN
+  VB
+  HUB
+}
+
+model VentureBuilderProfile {
+  id String @id @default(cuid())
+
+  userId String @unique
+  user   User @relation(fields: [userId], references: [id])
+
+  organizationName        String
+  legalEntityType         String
+  registrationNumber      String
+  dateOfIncorporation     DateTime
+  gstNumber               String?
+  registeredOfficeAddress String
+
+  contactPersonName        String
+  contactPersonDesignation String
+  contactPersonEmail       String
+  contactPersonMobile      String
+
+  founderExperience        String
+  minimumViableProduct     String?
+  mentorNetworkAccess      String
+  startupFrameworkApproach String
+
+  startupTargetUnderstanding String
+  startupTargetComments      String?
+
+  coordinationCommitment String
+
+  tier2Tier3Strategy String
+
+  legalEntityProof       String?
+  pastEngagementDocuments String[]
+
+  declarationAccuracy            Boolean @default(false)
+  declarationSchemeUnderstanding Boolean @default(false)
+
+  profileCompleted               Int      @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Hub {
+  id              String           @id @default(cuid())
+
+  name            String
+  description     String?
+  location        String?
+
+  isActive        Boolean          @default(true)
+
+  managerId       String?
+  manager         User?            @relation("HubManager", fields: [managerId], references: [id])
+
+  assignments     HubAssignment[]
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}
+
+model HubAssignment {
+  id          String    @id @default(cuid())
+
+  hubId       String
+  hub         Hub       @relation(fields: [hubId], references: [id])
+
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+
+  createdAt   DateTime  @default(now())
+
+  @@unique([hubId, userId])
+}
+
+model Milestone {
+   id          String   @id @default(cuid())
+   orderNumber Int      @unique
+   title       String
+   description String?
+   targetCount Int      @default(25)
+   isActive    Boolean  @default(true)
+   createdAt   DateTime @default(now())
+   updatedAt   DateTime @updatedAt
+
+   assignments MilestoneAssignment[]
+}
+
+model MilestoneAssignment {
+  id             String            @id @default(cuid())
+  status         MilestoneStatus   @default(PENDING)
+  completedCount Int @default(0) // 5,10,15,20,25
+  deadline       DateTime?
+  submittedAt    DateTime?
+  reviewedAt     DateTime?
+  adminNote      String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  milestoneId String
+  milestone   Milestone         @relation(fields: [milestoneId], references: [id])
+
+  userId      String
+  user        User              @relation("AssignedVB", fields: [userId], references: [id])
+
+  reviewedById String?
+  reviewedBy   User?            @relation("ReviewedBy", fields: [reviewedById], references: [id])
+
+  documents   Document[]
+
+  @@unique([milestoneId, userId])
+}
+
+enum MilestoneStatus {
+  PENDING
+  IN_PROGRESS
+  SUBMITTED
+  APPROVED
+  REJECTED
+}
+
+model Document {
+  id              String              @id @default(cuid())
+  name            String
+  url             String
+  size            String?
+  type            String?
+  completedCount  Int                  @default(0)
+  note            String?
+  batchStatus    String   @default("PENDING")  // PENDING | APPROVED | REJECTED
+  adminFeedback  String?               // admin note per batch
+  reviewedAt     DateTime?
+  createdAt       DateTime             @default(now())
+
+  assignmentId    String
+  assignment      MilestoneAssignment  @relation(fields: [assignmentId], references: [id])
+
+  uploadedById    String
+  uploadedBy      User                 @relation("UploadedBy", fields: [uploadedById], references: [id])
+  
+}
+
+
