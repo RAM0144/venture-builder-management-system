@@ -3,91 +3,6 @@ import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"
 
 
-
-//POST - VB uploads documents link as evidence with completedCount for this batch
-// export async function POST(req, {params}) {
-//     try {
-//         const session = await getServerSession(authOptions)
-
-//         if(!session){
-//             return Response.json(
-//               { message: "Unauthorized" },
-//               { status: 401 }  
-//             )
-//         }
-
-//        const { id } = await params
-//        const { name, url, type, completedCount, note } = await req.json()
-
-//        if (!name || !url) {
-//             return Response.json(
-//                 { message: "Name and URL are required" },
-//                 { status: 400 }
-//             )
-//         }
-
-//         if(!completedCount || Number(completedCount) <= 0) {
-//             return Response.json(
-//                { message: "Please enter how many startups you completed" },
-//                { status: 400 } 
-//             )
-//         }
-
-//         // get current assignment
-//         const assignment = await prisma.milestoneAssignment.findUnique({
-//              where: { id },
-//             include: { milestone: true }
-//         })
-
-//         if (!assignment) {
-//             return Response.json(
-//                 { message: "Assignment not found" },
-//                 { status: 404 }
-//             )
-//         }
-
-//         const newTotal = current.completedCount + Number(completedCount)
-//         const cappedTotal = Math.min(newTotal, current.milestone.targetCount)
-
-//         const [document] = await prisma.$transaction([
-          
-//           //1.create document  
-//           prisma.document.create({
-//             data: {
-//                 name,
-//                 url,
-//                 type: type || "link",
-//                 completedCount: Number(completedCount),
-//                 note: note || null,
-//                 assignmentId: id,
-//                 uploadedById: session.user.id
-//             }
-//           }),
-
-//           // 2. update completedCount on assignment
-//             prisma.milestoneAssignment.update({
-//                 where: { id },
-//                 data: {
-//                     completedCount: cappedTotal,
-//                     status:         "IN_PROGRESS"
-//                 }
-//             })
-//         ])
-
-//         return Response.json(
-//             { message: "Document uploaded successfully", document },
-//             { status: 201 }
-//         )
-
-//     } catch (error) {
-//          console.log(error)
-//         return Response.json(
-//             { message: "Something went wrong" },
-//             { status: 500 }
-//         )
-//     }
-// }
-
 export async function POST(req, {params}) {
     try {
         const session = await getServerSession(authOptions)
@@ -249,3 +164,90 @@ export async function DELETE(req, {params}) {
         ) 
     }
 }
+
+
+
+
+//POST - VB uploads documents link as evidence with completedCount for this batch
+// export async function POST(req, {params}) {
+//     try {
+//         const session = await getServerSession(authOptions)
+
+//         if(!session){
+//             return Response.json(
+//               { message: "Unauthorized" },
+//               { status: 401 }  
+//             )
+//         }
+
+//        const { id } = await params
+//        const { name, url, type, completedCount, note } = await req.json()
+
+//        if (!name || !url) {
+//             return Response.json(
+//                 { message: "Name and URL are required" },
+//                 { status: 400 }
+//             )
+//         }
+
+//         if(!completedCount || Number(completedCount) <= 0) {
+//             return Response.json(
+//                { message: "Please enter how many startups you completed" },
+//                { status: 400 } 
+//             )
+//         }
+
+//         // get current assignment
+//         const assignment = await prisma.milestoneAssignment.findUnique({
+//              where: { id },
+//             include: { milestone: true }
+//         })
+
+//         if (!assignment) {
+//             return Response.json(
+//                 { message: "Assignment not found" },
+//                 { status: 404 }
+//             )
+//         }
+
+//         const newTotal = current.completedCount + Number(completedCount)
+//         const cappedTotal = Math.min(newTotal, current.milestone.targetCount)
+
+//         const [document] = await prisma.$transaction([
+          
+//           //1.create document  
+//           prisma.document.create({
+//             data: {
+//                 name,
+//                 url,
+//                 type: type || "link",
+//                 completedCount: Number(completedCount),
+//                 note: note || null,
+//                 assignmentId: id,
+//                 uploadedById: session.user.id
+//             }
+//           }),
+
+//           // 2. update completedCount on assignment
+//             prisma.milestoneAssignment.update({
+//                 where: { id },
+//                 data: {
+//                     completedCount: cappedTotal,
+//                     status:         "IN_PROGRESS"
+//                 }
+//             })
+//         ])
+
+//         return Response.json(
+//             { message: "Document uploaded successfully", document },
+//             { status: 201 }
+//         )
+
+//     } catch (error) {
+//          console.log(error)
+//         return Response.json(
+//             { message: "Something went wrong" },
+//             { status: 500 }
+//         )
+//     }
+// }
