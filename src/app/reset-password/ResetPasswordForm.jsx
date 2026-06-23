@@ -2,14 +2,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import logo from "../assets/logo.png"
 
 export default function ResetPassword(){
 
     const router = useRouter()
     const searchParams = useSearchParams()
-    const token = searchParams.get("token")
+    // const token = searchParams.get("token")
 
      const [formData, setFormData] = useState({
         password: "",
@@ -18,6 +18,11 @@ export default function ResetPassword(){
     const [loading, setLoading] = useState(false)
     const [error, setError]     = useState("")
     const [success, setSuccess] = useState(false)
+    const [token, setToken] = useState("")
+
+    useEffect(() => {
+        setToken(searchParams.get("token") || "")
+    }, [searchParams])
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value })

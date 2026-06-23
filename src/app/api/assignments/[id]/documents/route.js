@@ -188,7 +188,7 @@ export async function POST(req, {params}) {
 }
 
 // Delete - remove document
-export async function Delete(req, {params}) {
+export async function DELETE(req, {params}) {
     try {
         const session = await getServerSession(authOptions)
 
