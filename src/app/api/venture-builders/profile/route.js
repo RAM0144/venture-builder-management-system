@@ -1,7 +1,8 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
+// import { authOptions } from "../../auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
 import { validateRegistrationNumber, validateGST, validateEmail, validateMobile } from "@/lib/validators";
+import { authOptions } from "@/lib/auth";
 
 export async function GET(req) {
     try {
