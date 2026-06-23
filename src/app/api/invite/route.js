@@ -1,8 +1,9 @@
 import { getServerSession } from "next-auth"
-import { authOptions } from "../auth/[...nextauth]/route"
+// import { authOptions } from "../auth/[...nextauth]/route"
 import { prisma } from "@/lib/prisma"
 import crypto from "crypto"
 import { sendInviteEmail } from "@/lib/mail"
+import { authOptions } from "@/lib/auth"
 
 //  Admin Creates + Invites VB
 export async function POST(req) {

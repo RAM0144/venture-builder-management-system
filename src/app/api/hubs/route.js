@@ -1,8 +1,9 @@
 import { getServerSession } from "next-auth"
-import { authOptions } from "../auth/[...nextauth]/route"
+// import { authOptions } from "../auth/[...nextauth]/route"
 import { prisma } from "@/lib/prisma"
 import crypto from "crypto"
 import { sendHubInviteEmail } from "@/lib/mail"
+import { authOptions } from "@/lib/auth"
 
 //Get all hubs
 export async function GET(req) {

@@ -1,4 +1,5 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+// import { authOptions } from "@/app/api/auth/[...nextauth]/route"
+import { authOptions } from "@/lib/auth"
 import { sendMilestoneAssigned } from "@/lib/mail"
 import { prisma } from "@/lib/prisma"
 import { getServerSession } from "next-auth"

@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint"
   },
+  
   "type": "module",
   "prisma": {
     "seed": "node prisma/seed.js"

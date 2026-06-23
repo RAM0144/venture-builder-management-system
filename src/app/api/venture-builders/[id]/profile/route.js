@@ -1,7 +1,8 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+// import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { validateRegistrationNumber, validateGST, validateEmail, validateMobile } from "@/lib/validators";
 import { prisma } from "@/lib/prisma";
+import { authOptions } from "@/lib/auth";
 
 //GET - admin fetches a VB's profile
 export async function GET(req, {params}) {

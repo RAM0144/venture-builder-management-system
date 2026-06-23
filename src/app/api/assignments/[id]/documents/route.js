@@ -14,7 +14,7 @@ export async function POST(req, {params}) {
         const { id } = await params
         const { name, url, completedCount, note } = await req.json()
 
-         if (!name || !url) {
+        if (!name || !url) {
             return Response.json(
                 { message: "Name and URL are required" },
                 { status: 400 }
