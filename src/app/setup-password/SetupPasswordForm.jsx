@@ -1,22 +1,31 @@
 "use client"
+
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 
 export default function SetupPasswordForm() {
 
     const router = useRouter()
     const searchParams = useSearchParams()
-    const token = searchParams.get("token")
+    // const token = searchParams.get("token")
 
     const [formData, setFormData] = useState({
         password: "",
         confirmPassword: ""
     })
+
+    
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
     const [success, setSuccess] = useState("")
+    const [token, setToken] = useState("")
+
+
+    useEffect(() => {
+        setToken(searchParams.get("token") || [])
+    }, [searchParams])
 
     const handleChange = async (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value })
